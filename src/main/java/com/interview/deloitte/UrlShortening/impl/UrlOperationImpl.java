@@ -4,6 +4,7 @@ import java.util.Base64;
 
 import com.interview.deloitte.UrlShortening.api.UrlOperation;
 import com.interview.deloitte.UrlShortening.dao.UrlShorteningDB;
+import com.interview.deloitte.UrlShortening.exception.UrlShorteningException;
 
 public class UrlOperationImpl implements UrlOperation {
 
@@ -28,7 +29,7 @@ public class UrlOperationImpl implements UrlOperation {
 			encodedValueCounter = Base64.getEncoder().encodeToString(localId.toString().getBytes(UTF8));
 
 		} catch (Exception ex) {
-			System.err.println("Application encountered error while shortening URL: \r\n " + actualUrl);
+			throw new UrlShorteningException("Application encountered error while shortening URL: \r\n " + actualUrl);
 		}
 		return SHORT_PRETEXT_URL + encodedValueCounter;
 
@@ -42,7 +43,7 @@ public class UrlOperationImpl implements UrlOperation {
 			Integer decodeValue = new Integer(new String(decodedArray, UTF8));
 			actualUrl = UrlShorteningDB.getUrlBasedOnId(decodeValue);
 		} catch (Exception ex) {
-			System.err.println("Application encountered error getting Url from: \r\n" + shortUrl);
+			throw new UrlShorteningException("Application encountered error while shortening URL: \r\n " + actualUrl);
 		}
 
 		return actualUrl;
